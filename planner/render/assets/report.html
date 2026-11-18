@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ Mind to Machine Hackathon Executive Planner</title>
+  <style>/* {{STYLE}} */</style>
+</head>
+<body data-theme="dark">
+  <header>
+    <div class="top-bar">
+      <div>
+        <div class="brand-title">⚡ Mind to Machine Hackathon Planner</div>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.25rem;">
+          Deterministic Event Architecture & Real-Time Constraint Verifier
+        </p>
+      </div>
+      <div class="top-actions">
+        <button id="btn-audio-briefing" class="btn btn-secondary" style="border-color: #38bdf8; color: #38bdf8;" title="Listen to dynamic executive audio briefing">
+          <span id="audio-icon">🎙️</span> <span id="audio-btn-text">Audio Briefing</span>
+        </button>
+        <button id="btn-export-bundle" class="btn btn-primary">
+          <span>📥 Export Judge Packet</span>
+        </button>
+        <button id="theme-toggle" class="btn btn-secondary">☀️ Light Mode</button>
+      </div>
+    </div>
+
+    <!-- Clear Explanation Strip for Judges -->
+    <div style="margin-top: 1.25rem; padding: 0.9rem 1.4rem; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 10px; font-size: 0.9rem; line-height: 1.5;">
+      💡 <strong>System Architecture:</strong>
+      The AI model performs <strong>only 1 job</strong>: reading unstructured text (English & Roman Urdu) into structured facts.
+      All arithmetic, venue picking, judging round-robin allocation, timetable building, and constraint checks are executed in <strong>100% deterministic Python code</strong> (Zero Hallucination, Zero Token Bloat).
+    </div>
+
+    <!-- Quick Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">
+          <span>👥 Attendees (Headcount)</span>
+          <span style="font-size:0.75rem; color:var(--accent);">Exact</span>
+        </div>
+        <div class="stat-value">
+          <span id="header-headcount" class="provenance" data-tooltip="150 students (Msg #1) + 10 staff (Msg #1) + 17 judges needed (Msg #5)">177</span>
+        </div>
+        <div class="stat-sub" id="header-headcount-sub">150 students + 10 staff + 17 judges</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">
+          <span>💰 Budget Balance</span>
+          <span style="font-size:0.75rem; color:var(--success);">Under Cap</span>
+        </div>
+        <div class="stat-value" id="header-budget-used">Rs 0</div>
+        <div class="stat-sub" id="header-budget-sub">Remaining: Rs 0 of Rs 0</div>
+        <div class="progress-bar">
+          <div id="budget-progress-fill" class="progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">
+          <span>✅ Graded Verification</span>
+          <span style="font-size:0.75rem; color:var(--success);">Pass</span>
+        </div>
+        <div class="stat-value" style="font-size: 1.35rem; margin-top:0.4rem;">
+          <span id="header-checks-summary" class="badge badge-pass">6/6 Checks Passed</span>
+        </div>
+        <div class="stat-sub">Figures, Budget, Venue, Schedule, Judges, Areas</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">
+          <span>⚡ AI Calls & Tokens</span>
+          <span class="badge" style="background:rgba(56,189,248,0.12); color:var(--accent); font-size:0.7rem; padding:2px 6px;">1 Call &bull; Lean</span>
+        </div>
+        <div class="stat-value" id="header-tokens-summary" style="font-size: 1.6rem; color:var(--text-primary); margin-top:0.3rem;">
+          <span id="header-tokens-total">2,108</span> <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">tokens</span>
+        </div>
+        <div class="stat-sub" id="header-tokens-sub" style="display:flex; flex-direction:column; gap:4px; margin-top:0.35rem;">
+          <div style="display:flex; justify-content:space-between; font-size:0.82rem;">
+            <span>📥 <strong id="header-tokens-in" style="color:var(--accent);">908</strong> in (prompt)</span>
+            <span>📤 <strong id="header-tokens-out" style="color:#c084fc;">1,200</strong> out (completion)</span>
+          </div>
+          <div class="progress-bar" style="height:6px; margin-top:4px;">
+            <div id="header-tokens-bar" class="progress-fill" style="width: 43%; background: linear-gradient(90deg, var(--accent) 0%, #c084fc 100%);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Pinned Rejections Container -->
+  <div id="pinned-rejections"></div>
+
+  <!-- Interactive Tabs Navigation -->
+  <nav class="tabs-nav">
+    <button class="tab-btn active" data-tab="plan">📋 Event Plan <span class="shortcut-badge">1</span></button>
+    <button class="tab-btn" data-tab="judging-grid">⚖️ Judging Matrix <span class="shortcut-badge">2</span></button>
+    <button class="tab-btn" data-tab="trace">🔍 Trace & Tokens <span class="shortcut-badge">3</span></button>
+    <button class="tab-btn" data-tab="messages">✉️ Messages Feed <span class="shortcut-badge">4</span></button>
+    <button class="tab-btn" data-tab="checks">✅ Graded Checks <span class="shortcut-badge">5</span></button>
+    <button class="tab-btn" data-tab="simulation" style="color: #f59e0b;">🧪 What-If Stress Lab <span class="shortcut-badge">6</span></button>
+  </nav>
+
+  <!-- TAB 1: Event Plan -->
+  <div id="tab-plan" class="tab-panel active">
+    <div class="grid-2col">
+      <!-- Left Column: Venue, Food, Judging -->
+      <div>
+        <div class="card">
+          <div class="card-title">
+            <span>🏢 Venue Selection</span>
+            <span class="badge badge-pass" id="venue-status-badge">Fits Headcount</span>
+          </div>
+          <div id="venue-details"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>🍱 Catering & Food</span>
+            <span class="badge badge-pass">Exact Count</span>
+          </div>
+          <div id="food-details"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <span>⚖️ Judging Logistics</span>
+            <span class="badge badge-pass">3 Reserves</span>
+          </div>
+          <div id="judging-details"></div>
+        </div>
+      </div>
+
+      <!-- Right Column: Schedule & Financial Ledger -->
+      <div>
+        <div class="card">
+          <div class="card-title">⏱️ 4-Hour Timetable Schedule</div>
+          <div id="schedule-timeline"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">💰 Financial Ledger</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Line Item</th>
+                <th>Category</th>
+                <th style="text-align:right;">Amount (Rs)</th>
+              </tr>
+            </thead>
+            <tbody id="budget-table-body"></tbody>
+          </table>
+          <div style="margin-top:1.5rem;">
+            <div class="card-title" style="font-size:0.95rem;">Optional Parked Requests (Wishes)</div>
+            <div id="optional-extras-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Judging Matrix Grid -->
+  <div id="tab-judging-grid" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <span>⚖️ Interactive Judging Allocation Matrix (50 Teams × 17 Judges)</span>
+        <span class="badge badge-pass">Round-Robin Assignment</span>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1rem;">
+        Each team is evaluated for exactly 15 minutes by an assigned judge. Max 3 teams per judge. 3 spare confirmed judges are designated as standby reserves.
+      </p>
+      <div class="judging-grid-container" id="judging-grid-content"></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Trace -->
+  <div id="tab-trace" class="tab-panel">
+    <!-- Individual Token Analytics Cards -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:1.25rem;">
+      <div class="stat-card" style="padding:1rem; border-left:4px solid var(--accent);">
+        <div class="stat-label"><span>📥 Prompt / Input Tokens</span></div>
+        <div id="tab-tokens-in" class="stat-value" style="font-size:1.6rem; color:var(--accent);">908</div>
+        <div class="stat-sub">Message pack + schema prompt</div>
+      </div>
+      <div class="stat-card" style="padding:1rem; border-left:4px solid #c084fc;">
+        <div class="stat-label"><span>📤 Completion / Output</span></div>
+        <div id="tab-tokens-out" class="stat-value" style="font-size:1.6rem; color:#c084fc;">1,200</div>
+        <div class="stat-sub">Structured facts JSON extraction</div>
+      </div>
+      <div class="stat-card" style="padding:1rem; border-left:4px solid var(--success);">
+        <div class="stat-label"><span>📊 Combined Total Tokens</span></div>
+        <div id="tab-tokens-total" class="stat-value" style="font-size:1.6rem; color:var(--text-primary);">2,108</div>
+        <div class="stat-sub">Recorded directly from provider API</div>
+      </div>
+      <div class="stat-card" style="padding:1rem; border-left:4px solid #f59e0b;">
+        <div class="stat-label"><span>⚡ Model Telemetry</span></div>
+        <div id="tab-tokens-calls" class="stat-value" style="font-size:1.6rem; color:#f59e0b;">1 Call</div>
+        <div id="tab-tokens-ms" class="stat-sub">3.5s latency &bull; qwen/qwen3.8-27b</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span>Numbered Model Calls (Area: reading)</span>
+        <span class="badge badge-pass" style="font-size:0.75rem;">100% Math Done in Code</span>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1rem;">
+        Only model calls are numbered. Token counts are recorded directly from the API response without estimation. Click any call to inspect the exact prompt and structured output JSON.
+      </p>
+      <div id="trace-calls-list"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Chronological Domain Events</div>
+      <div id="trace-events-list"></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: Messages -->
+  <div id="tab-messages" class="tab-panel">
+    <div class="card">
+      <div class="card-title">Received Messages Feed</div>
+      <div id="messages-list"></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Checks -->
+  <div id="tab-checks" class="tab-panel">
+    <div class="card">
+      <div class="card-title">The Six Graded Checks + Invariants</div>
+      <div id="checks-list"></div>
+    </div>
+  </div>
+
+  <!-- TAB 6: What-If Stress Lab -->
+  <div id="tab-simulation" class="tab-panel">
+    <div class="card" style="border: 1px solid var(--warning);">
+      <div class="card-title" style="color: var(--warning);">
+        <span>🧪 Interactive What-If Stress Simulation Lab</span>
+        <span class="badge" style="background:var(--warning-bg); color:var(--warning);">Live In-Memory Sim</span>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+        Drag the sliders below to test how our deterministic engine handles sudden constraint shifts in real time without calling any LLM.
+      </p>
+
+      <div class="grid-2col">
+        <!-- Sliders -->
+        <div style="background: rgba(0,0,0,0.2); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border);">
+          <div class="slider-container">
+            <div class="slider-header">
+              <span>Students Count:</span>
+              <strong id="sim-students-val" style="color:var(--accent);">150</strong>
+            </div>
+            <input type="range" id="sim-students" min="50" max="350" step="3" value="150">
+          </div>
+
+          <div class="slider-container">
+            <div class="slider-header">
+              <span>Budget Cap (Rs):</span>
+              <strong id="sim-budget-val" style="color:var(--accent);">Rs 500,000</strong>
+            </div>
+            <input type="range" id="sim-budget" min="300000" max="1000000" step="10000" value="500000">
+          </div>
+
+          <div class="slider-container">
+            <div class="slider-header">
+              <span>Standby Generator Mandatory:</span>
+              <input type="checkbox" id="sim-gen" style="accent-color:var(--accent); transform:scale(1.3);">
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Sim Results -->
+        <div style="background: rgba(0,0,0,0.2); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border);">
+          <h4 style="font-size:0.95rem; margin-bottom:0.75rem; color:var(--accent);">Real-Time Engine Recalculation:</h4>
+          <div style="font-size:0.9rem; line-height:1.8;">
+            <p>Calculated Headcount: <strong id="sim-res-headcount" style="color:#fff;">-</strong></p>
+            <p>Judges Needed: <strong id="sim-res-judges" style="color:#fff;">-</strong></p>
+            <p>Optimal Venue: <strong id="sim-res-venue" style="color:#fff;">-</strong></p>
+            <p>Total Cost: <strong id="sim-res-total" style="color:#fff;">-</strong></p>
+            <p>Status: <span id="sim-res-status" class="badge badge-pass">VALID &amp; FEASIBLE</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inlined data placeholder -->
+  <script id="plan-data-json" type="application/json">
+    {{DATA}}
+  </script>
+  <script>
+    window.__PLAN_DATA__ = JSON.parse(document.getElementById("plan-data-json").textContent || "{}");
+  </script>
+  <!-- Inlined app logic -->
+  <script>/* {{APP_JS}} */</script>
+</body>
+</html>

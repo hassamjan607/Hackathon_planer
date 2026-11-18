@@ -1,0 +1,81 @@
+{
+  "m": [
+    {
+      "i": 1,
+      "d": "11-09",
+      "act": "inform",
+      "f": [
+        {"k": "param", "key": "duration_min", "v": 240},
+        {"k": "param", "key": "students", "v": 150},
+        {"k": "param", "key": "team_size", "v": 3},
+        {"k": "param", "key": "budget_total", "v": 650000},
+        {"k": "param", "key": "staff", "v": 10},
+        {"k": "block", "name": "prayer break", "min": 15}
+      ]
+    },
+    {
+      "i": 2,
+      "d": "11-03",
+      "act": "inform",
+      "f": [
+        {"k": "option", "cat": "venue", "name": "Room D", "v": 40000, "per": "total", "cap": 80, "feats": []},
+        {"k": "option", "cat": "venue", "name": "Hall A", "v": 120000, "per": "total", "cap": 200, "feats": []},
+        {"k": "option", "cat": "venue", "name": "Hall B", "v": 150000, "per": "total", "cap": 200, "feats": ["generator"]},
+        {"k": "option", "cat": "venue", "name": "Hall C", "v": 220000, "per": "total", "cap": 300, "feats": ["generator"]}
+      ]
+    },
+    {
+      "i": 3,
+      "d": "10-20",
+      "act": "inform",
+      "f": [
+        {"k": "option", "cat": "food", "name": "Standard lunch box", "v": 1000, "per": "head", "tier": "std"}
+      ]
+    },
+    {
+      "i": 4,
+      "d": "11-12",
+      "act": "inform",
+      "f": [
+        {"k": "option", "cat": "food", "name": "Standard lunch box", "v": 1200, "per": "head", "tier": "std"},
+        {"k": "option", "cat": "food", "name": "basic", "v": 800, "per": "head", "tier": "low"}
+      ]
+    },
+    {
+      "i": 5,
+      "d": "11-11",
+      "act": "inform",
+      "f": [
+        {"k": "param", "key": "judges_confirmed", "v": 20},
+        {"k": "param", "key": "honorarium", "v": 5000},
+        {"k": "param", "key": "min_per_team", "v": 15},
+        {"k": "param", "key": "max_teams_per_judge", "v": 3}
+      ]
+    },
+    {
+      "i": 6,
+      "d": "11-10",
+      "act": "inform",
+      "f": [
+        {"k": "spent", "name": "prizes", "v": 100000},
+        {"k": "spent", "name": "backup internet", "v": 20000},
+        {"k": "spent", "name": "printing", "v": 10000}
+      ]
+    },
+    {
+      "i": 7,
+      "d": "11-13",
+      "act": "request",
+      "f": [
+        {"k": "ask", "name": "DJ", "v": 50000}
+      ]
+    },
+    {
+      "i": 8,
+      "d": "11-14",
+      "act": "noise",
+      "why": "Traffic remark, no plan impact",
+      "f": []
+    }
+  ]
+}

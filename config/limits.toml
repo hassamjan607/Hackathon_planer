@@ -1,0 +1,9 @@
+# Hard timeouts and call caps per brief specifications
+[limits]
+full_run_timeout_seconds = 120
+update_run_timeout_seconds = 60
+model_full_timeout_seconds = 80
+model_update_timeout_seconds = 40
+max_calls_per_update = 5
+max_tokens_output = 700
+temperature = 0.0

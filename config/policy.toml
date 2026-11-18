@@ -1,0 +1,10 @@
+# Design defaults (organizer decisions, NOT pack facts)
+[schedule]
+opening_minutes = 15
+lunch_minutes = 30
+closing_minutes = 15
+min_build_minutes = 60
+block_order = ["opening", "build", "lunch", "build", "judging", "closing"]
+
+[repair]
+order = ["food_tier", "cheaper_venue"]
